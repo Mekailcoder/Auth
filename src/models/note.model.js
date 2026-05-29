@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { type } from "node:os";
 import { title } from "node:process";
 
-const noteSchema = mongoose.Schema({
+const noteSchema = new mongoose.Schema({
     title:{
         type:String,
         required:true
