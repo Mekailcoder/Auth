@@ -77,4 +77,43 @@ app.get("/api/notes", async (req, res) => {
   }
 });
 
+/*
+@route PATCH /api/notes
+@description update data using Id
+*/
+
+app.patch("/api/notes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description } = req.body;
+    if (!description) {
+      return res.status(400).json({ error: "description is required" });
+    }
+
+    if (description.trim().length < 9) {
+      return res.status(400).json({ error: "description length must be > 9" });
+    }
+    const updateNote = await noteModel.findByIdAndUpdate(
+      id,
+      { description },
+      { new: true },
+    );
+    if(!updateNote){
+      return res.status(404).json({
+        error: "Note not found"
+      })
+    }
+
+    return res.status(200).json({
+      message: "notes updated is successfully",
+      updateNote,
+    });
+  } catch (error) {
+    console.log("error form updated server:", error);
+    return res.status(500).json({
+      message:"Interneal server error"
+    })
+  }
+});
+
 export default app;
