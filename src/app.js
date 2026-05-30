@@ -98,10 +98,10 @@ app.patch("/api/notes/:id", async (req, res) => {
       { description },
       { new: true },
     );
-    if(!updateNote){
+    if (!updateNote) {
       return res.status(404).json({
-        error: "Note not found"
-      })
+        error: "Note not found",
+      });
     }
 
     return res.status(200).json({
@@ -111,9 +111,35 @@ app.patch("/api/notes/:id", async (req, res) => {
   } catch (error) {
     console.log("error form updated server:", error);
     return res.status(500).json({
-      message:"Interneal server error"
-    })
+      message: "Interneal server error",
+    });
   }
+});
+
+/*
+@route delete /api/notes
+@description delete data using Id
+*/
+
+app.delete("/api/notes/:id", async (req, res) => {
+ try {
+   const { id } = req.params;
+   await noteModel.findByIdAndDelete(id)
+
+   return res.status(200).json({
+    message:"note deleted successfully",
+   })
+  
+ } catch (error) {
+  console.log("error from delete server:",error);
+
+  return res.status(500).json({
+    message:"internal server error",
+  })
+  
+ }
+
+  
 });
 
 export default app;
